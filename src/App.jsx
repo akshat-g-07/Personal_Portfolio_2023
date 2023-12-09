@@ -1,55 +1,26 @@
 import { useState } from "react";
-import ThreeDModel from "./threeDModel/ThreeDModel";
+import ThreeDModel from "./globalComps/ThreeDModel";
+import NextPrevButton from "./globalComps/NextPrevButton";
 import "./App.css";
 
 function App() {
   const [scrollTo, setScrollTo] = useState("landing");
   const [scrollDown, setScrollDown] = useState(0);
-  const sectionArray = [
-    "landing",
-    "skills",
-    "projects",
-    "experience",
-    "education",
-    "hobby",
-    "contact",
-  ];
+  const [transitionTime, setTransitionTime] = useState(2);
 
   return (
     <>
-      <ThreeDModel scrollTo={scrollTo} scrollDown={scrollDown} />
-      <div className="fixed bottom-16 right-16 z-10 bg-neutral-500">
-        <div
-          className="bg-red-500"
-          onClick={() => {
-            let indexVal = sectionArray.indexOf(scrollTo);
-            if (indexVal === 0) return;
-            indexVal -= 1;
-            setScrollTo("transition");
-            setScrollDown(-1);
-            setTimeout(() => {
-              setScrollTo(sectionArray[indexVal]);
-            }, 50);
-          }}
-        >
-          Prvs
-        </div>
-        <div
-          className="bg-blue-500"
-          onClick={() => {
-            let indexVal = sectionArray.indexOf(scrollTo);
-            if (indexVal === 6) return;
-            indexVal += 1;
-            setScrollTo("transition");
-            setScrollDown(1);
-            setTimeout(() => {
-              setScrollTo(sectionArray[indexVal]);
-            }, 50);
-          }}
-        >
-          Next
-        </div>
-      </div>
+      <ThreeDModel
+        scrollTo={scrollTo}
+        scrollDown={scrollDown}
+        transitionTime={transitionTime}
+      />
+      <NextPrevButton
+        scrollTo={scrollTo}
+        setScrollTo={setScrollTo}
+        setScrollDown={setScrollDown}
+        setTransitionTime={setTransitionTime}
+      />
     </>
   );
 }
