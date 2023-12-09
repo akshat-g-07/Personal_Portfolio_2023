@@ -2,140 +2,198 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
+import gsap from "gsap";
 
 // eslint-disable-next-line react/prop-types
-const ThreeDModel = ({ scrollTo, scrollDown }) => {
+const ThreeDModel = ({ scrollTo, scrollDown, transitionTime }) => {
   const animationMixerRef = useRef(null);
   const animationActionRef = useRef(null);
+  const renderer = useRef(null);
 
-  const someValue = useRef(scrollTo);
-  const scrollYValRef = useRef(scrollDown);
-
+  const scrollToRef = useRef(scrollTo);
+  scrollToRef.current = scrollTo;
+  const scrollDownRef = useRef(scrollDown);
+  scrollDownRef.current = scrollDown;
   const elapsedTime = useRef(0);
 
+  const cameraTimeline = useRef(null);
+  const cameraCoords = useRef({ x: 5, y: 5, z: 20 });
+
+  const timelineArray = useRef(null);
+  timelineArray.current = [
+    { x: 1, y: 2.5, z: 3.5 },
+    { x: 2.5, y: 1.5, z: 4.5 },
+    { x: -1.5, y: 1.5, z: 5 },
+    { x: -2, y: 1.5, z: 6 },
+    { x: 1.5, y: 1.5, z: 6.5 },
+    { x: 1.5, y: 1.5, z: 6.5 },
+    { x: -1.5, y: 1.5, z: 5 },
+  ];
+  const timelineIndx = useRef(0);
+
   useEffect(() => {
-    let character;
-    const scene = new THREE.Scene();
-
-    const camera = new THREE.PerspectiveCamera(
-      45,
-      window.innerWidth / window.innerHeight,
-      1,
-      1000
-    );
-    camera.position.set(0, 1, 5);
-
-    const spotLight = new THREE.SpotLight(0xffffff, 100);
-    spotLight.position.set(0, 5, 2);
-    spotLight.penumbra = 1;
-    spotLight.castShadow = true;
-    spotLight.shadow.focus = 1;
-    scene.add(spotLight);
-
     const canvasElement = document.querySelector(".webgl");
-    const renderer = new THREE.WebGLRenderer({
+    renderer.current = new THREE.WebGLRenderer({
       canvas: canvasElement,
     });
-    renderer.setPixelRatio(2);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.current.setPixelRatio(2);
+    renderer.current.setSize(window.innerWidth, window.innerHeight);
+  }, []);
 
-    const render = () => {
-      renderer.render(scene, camera);
-    };
+  const scene = new THREE.Scene();
+
+  const camera = useRef(null);
+  camera.current = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    1,
+    1000
+  );
+  camera.current.position.set(cameraCoords.x, cameraCoords.y, cameraCoords.z);
+
+  cameraTimeline.current = gsap.timeline();
+
+  if (scrollDownRef.current === 0) {
+    cameraTimeline.current.to(cameraCoords.current, {
+      x: 1,
+      y: 2.5,
+      z: 3.5,
+      duration: 2,
+      onUpdate: () => {
+        camera.current.position.set(
+          cameraCoords.current.x,
+          cameraCoords.current.y,
+          cameraCoords.current.z
+        );
+      },
+      onComplete: () => {
+        cameraTimeline.current.pause();
+      },
+    });
+  }
+
+  useEffect(() => {
+    if (scrollToRef.current === "transition") {
+      timelineIndx.current += scrollDownRef.current;
+      cameraTimeline.current.to(cameraCoords.current, {
+        x: timelineArray.current[timelineIndx.current].x,
+        y: timelineArray.current[timelineIndx.current].y,
+        z: timelineArray.current[timelineIndx.current].z,
+        duration: transitionTime,
+        ease: "slow(0.7, 0.7, false)",
+        onUpdate: () => {
+          camera.current.position.set(
+            cameraCoords.current.x,
+            cameraCoords.current.y,
+            cameraCoords.current.z
+          );
+        },
+      });
+    }
+  }, [transitionTime, scrollDownRef.current]);
+
+  const spotLight = new THREE.SpotLight(0xffffff, 100);
+  spotLight.position.set(0, 5, 2);
+  spotLight.penumbra = 1;
+  spotLight.castShadow = true;
+  spotLight.shadow.focus = 1;
+  scene.add(spotLight);
+
+  // eslint-disable-next-line no-unused-vars
+  const charLoader = new GLTFLoader().load("models/character.glb", (gltf) => {
+    const character = gltf.scene;
+    character.castShadow = true;
+    character.scale.set(1.5, 1.5, 1.5);
+    character.position.set(0, 0, 0);
+    scene.add(character);
 
     // eslint-disable-next-line no-unused-vars
-    const charLoader = new GLTFLoader().load("models/character.glb", (gltf) => {
-      character = gltf.scene;
-      character.castShadow = true;
-      character.scale.set(1, 1, 1);
-      character.position.set(0, 0, 0);
-      scene.add(character);
+    const animLoader = new FBXLoader().load("models/animation.fbx", (fbx) => {
+      animationMixerRef.current = new THREE.AnimationMixer(character);
 
-      // eslint-disable-next-line no-unused-vars
-      const animLoader = new FBXLoader().load("models/animation.fbx", (fbx) => {
-        animationMixerRef.current = new THREE.AnimationMixer(character);
+      const animationClip = fbx.animations[0];
+      animationActionRef.current =
+        animationMixerRef.current.clipAction(animationClip);
 
-        const animationClip = fbx.animations[0];
-        animationActionRef.current =
-          animationMixerRef.current.clipAction(animationClip);
+      animationActionRef.current.play();
 
-        animationActionRef.current.play();
-
-        someValue.current = scrollTo;
-        scrollYValRef.current = scrollDown;
-        const animate = () => {
-          requestAnimationFrame(animate);
-          animationMixerRef.current.update(0.001 * scrollYValRef.current);
-
-          if (someValue.current === "transition") {
-            animationActionRef.current.paused = false;
-          }
-          if (!animationActionRef.current.paused) {
-            animationActionRef.current.time = elapsedTime.current;
-            elapsedTime.current += 0.001 * scrollYValRef.current;
-          } else {
-            elapsedTime.current = animationActionRef.current.time;
-          }
-
-          if (
-            someValue.current === "landing" &&
-            animationActionRef.current.time >= 0 &&
-            animationActionRef.current.time <= 0.05
-          ) {
-            animationActionRef.current.paused = true;
-          }
-          if (
-            someValue.current === "skills" &&
-            animationActionRef.current.time >= 1.5 &&
-            animationActionRef.current.time <= 1.55
-          ) {
-            animationActionRef.current.paused = true;
-          }
-          if (
-            someValue.current === "projects" &&
-            animationActionRef.current.time >= 2.5 &&
-            animationActionRef.current.time <= 2.55
-          ) {
-            animationActionRef.current.paused = true;
-          }
-          if (
-            someValue.current === "experience" &&
-            animationActionRef.current.time >= 4.25 &&
-            animationActionRef.current.time <= 4.3
-          ) {
-            animationActionRef.current.paused = true;
-          }
-          if (
-            someValue.current === "education" &&
-            animationActionRef.current.time >= 5.5 &&
-            animationActionRef.current.time <= 5.55
-          ) {
-            animationActionRef.current.paused = true;
-          }
-          if (
-            someValue.current === "hobby" &&
-            animationActionRef.current.time >= 6.5 &&
-            animationActionRef.current.time <= 6.55
-          ) {
-            animationActionRef.current.paused = true;
-          }
-          if (
-            someValue.current === "contact" &&
-            animationActionRef.current.time >= 8.45 &&
-            animationActionRef.current.time <= 8.5
-          ) {
-            animationActionRef.current.paused = true;
-          }
-
-          render();
-        };
-
-        animate();
-      });
+      animate();
     });
+  });
+
+  const animate = () => {
+    requestAnimationFrame(animate);
+    animationMixerRef.current.update(0.001 * scrollDownRef.current);
+
+    if (scrollToRef.current === "transition") {
+      animationActionRef.current.paused = false;
+    }
+
+    if (!animationActionRef.current.paused) {
+      animationActionRef.current.time = elapsedTime.current;
+      elapsedTime.current += 0.001 * scrollDownRef.current;
+    } else {
+      elapsedTime.current = animationActionRef.current.time;
+    }
+
+    if (
+      scrollToRef.current === "landing" &&
+      animationActionRef.current.time >= 0 &&
+      animationActionRef.current.time <= 0.05
+    ) {
+      animationActionRef.current.paused = true;
+    }
+    if (
+      scrollToRef.current === "skills" &&
+      animationActionRef.current.time >= 1.5 &&
+      animationActionRef.current.time <= 1.55
+    ) {
+      animationActionRef.current.paused = true;
+    }
+    if (
+      scrollToRef.current === "projects" &&
+      animationActionRef.current.time >= 2.5 &&
+      animationActionRef.current.time <= 2.55
+    ) {
+      animationActionRef.current.paused = true;
+    }
+    if (
+      scrollToRef.current === "experience" &&
+      animationActionRef.current.time >= 4.25 &&
+      animationActionRef.current.time <= 4.3
+    ) {
+      animationActionRef.current.paused = true;
+    }
+    if (
+      scrollToRef.current === "education" &&
+      animationActionRef.current.time >= 5.5 &&
+      animationActionRef.current.time <= 5.55
+    ) {
+      animationActionRef.current.paused = true;
+    }
+    if (
+      scrollToRef.current === "hobby" &&
+      animationActionRef.current.time >= 6.5 &&
+      animationActionRef.current.time <= 6.55
+    ) {
+      animationActionRef.current.paused = true;
+    }
+    if (
+      scrollToRef.current === "contact" &&
+      animationActionRef.current.time >= 8.45 &&
+      animationActionRef.current.time <= 8.5
+    ) {
+      animationActionRef.current.paused = true;
+    }
 
     render();
-  }, [scrollTo]);
+  };
+
+  const render = () => {
+    renderer.current && renderer.current.render(scene, camera.current);
+  };
+
+  render();
 
   return (
     <>
