@@ -6,6 +6,7 @@ import gsap from "gsap";
 
 // eslint-disable-next-line react/prop-types
 const ThreeDModel = ({ scrollTo, scrollDown, transitionTime }) => {
+  // console.log(scrollTo, scrollDown, transitionTime);
   const animationMixerRef = useRef(null);
   const animationActionRef = useRef(null);
   const renderer = useRef(null);
@@ -20,15 +21,37 @@ const ThreeDModel = ({ scrollTo, scrollDown, transitionTime }) => {
   const cameraCoords = useRef({ x: 5, y: 5, z: 20 });
 
   const timelineArray = useRef(null);
-  timelineArray.current = [
-    { x: 1, y: 2.5, z: 3.5 },
-    { x: 2.5, y: 1.5, z: 4.5 },
-    { x: -1.5, y: 1.5, z: 5 },
-    { x: -2, y: 1.5, z: 6 },
-    { x: 1.5, y: 1.5, z: 6.5 },
-    { x: 1.5, y: 1.5, z: 6.5 },
-    { x: -1.5, y: 1.5, z: 5 },
-  ];
+
+  timelineArray.current =
+    window.innerWidth < 768
+      ? [
+          { x: 1, y: 2.9, z: 7.5 },
+          { x: 0, y: 3.5, z: 10 },
+          { x: 0, y: 3.5, z: 10 },
+          { x: -1, y: 2, z: 12 },
+          { x: 0, y: 0, z: 10 },
+          { x: -0.75, y: 0, z: 10 },
+          { x: -0.75, y: 1.5, z: 10 },
+        ]
+      : window.innerWidth < 1024
+      ? [
+          { x: 1, y: 2.5, z: 4 },
+          { x: 1, y: 2.5, z: 8 },
+          { x: -0.5, y: 3, z: 8 },
+          { x: -0.75, y: 1.5, z: 7.5 },
+          { x: 0, y: 1, z: 6.5 },
+          { x: -0.75, y: 2, z: 8 },
+          { x: -1, y: 2, z: 8 },
+        ]
+      : [
+          { x: 1, y: 2.5, z: 3.5 },
+          { x: 2.5, y: 1.5, z: 4.5 },
+          { x: -1.5, y: 1.5, z: 5 },
+          { x: -2, y: 1.5, z: 6 },
+          { x: 1.5, y: 1.5, z: 6.5 },
+          { x: 1.5, y: 1.5, z: 6.5 },
+          { x: -1.5, y: 1.5, z: 5 },
+        ];
   const timelineIndx = useRef(0);
 
   useEffect(() => {
@@ -55,9 +78,9 @@ const ThreeDModel = ({ scrollTo, scrollDown, transitionTime }) => {
 
   if (scrollDownRef.current === 0) {
     cameraTimeline.current.to(cameraCoords.current, {
-      x: 1,
-      y: 2.5,
-      z: 3.5,
+      x: timelineArray.current[0].x,
+      y: timelineArray.current[0].y,
+      z: timelineArray.current[0].z,
       duration: 2,
       onUpdate: () => {
         camera.current.position.set(
@@ -195,9 +218,51 @@ const ThreeDModel = ({ scrollTo, scrollDown, transitionTime }) => {
 
   render();
 
+  window.addEventListener("resize", () => {
+    camera.current.aspect = window.innerWidth / window.innerHeight;
+    camera.current.updateProjectionMatrix();
+    renderer.current &&
+      renderer.current.setSize(window.innerWidth, window.innerHeight);
+    timelineArray.current =
+      window.innerWidth < 768
+        ? [
+            { x: 1, y: 2.9, z: 7.5 },
+            { x: 0, y: 3.5, z: 10 },
+            { x: 0, y: 3.5, z: 10 },
+            { x: -1, y: 2, z: 12 },
+            { x: 0, y: 0, z: 10 },
+            { x: -0.75, y: 0, z: 10 },
+            { x: -0.75, y: 1.5, z: 10 },
+          ]
+        : window.innerWidth < 1024
+        ? [
+            { x: 1, y: 2.5, z: 4 },
+            { x: 1, y: 2.5, z: 8 },
+            { x: -0.5, y: 3, z: 8 },
+            { x: -0.75, y: 1.5, z: 7.5 },
+            { x: 0, y: 1, z: 6.5 },
+            { x: -0.75, y: 2, z: 8 },
+            { x: -1, y: 2, z: 8 },
+          ]
+        : [
+            { x: 1, y: 2.5, z: 3.5 },
+            { x: 2.5, y: 1.5, z: 4.5 },
+            { x: -1.5, y: 1.5, z: 5 },
+            { x: -2, y: 1.5, z: 6 },
+            { x: 1.5, y: 1.5, z: 6.5 },
+            { x: 1.5, y: 1.5, z: 6.5 },
+            { x: -1.5, y: 1.5, z: 5 },
+          ];
+    camera.current.position.set(
+      timelineArray.current[timelineIndx.current].x,
+      timelineArray.current[timelineIndx.current].y,
+      timelineArray.current[timelineIndx.current].z
+    );
+  });
+
   return (
     <>
-      <canvas className="webgl fixed top-0" />
+      <canvas className="webgl fixed top-0 -z-10" />
     </>
   );
 };
