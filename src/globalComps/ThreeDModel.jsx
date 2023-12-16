@@ -58,6 +58,7 @@ const ThreeDModel = ({ scrollTo, scrollDown, transitionTime }) => {
     const canvasElement = document.querySelector(".webgl");
     renderer.current = new THREE.WebGLRenderer({
       canvas: canvasElement,
+      alpha: true,
     });
     renderer.current.setPixelRatio(2);
     renderer.current.setSize(window.innerWidth, window.innerHeight);
@@ -262,7 +263,10 @@ const ThreeDModel = ({ scrollTo, scrollDown, transitionTime }) => {
 
   return (
     <>
-      <canvas className="webgl fixed top-0 -z-10" />
+      <canvas
+        className="webgl fixed top-0 -z-10"
+        style={{ backgroundColor: "rgb(13,5,26)" }}
+      />
     </>
   );
 };
