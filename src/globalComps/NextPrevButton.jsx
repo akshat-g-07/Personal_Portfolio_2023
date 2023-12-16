@@ -24,7 +24,7 @@ const NextPrevButton = ({
   return (
     <>
       <motion.div
-        className="fixed flex flex-col justify-between h-screen right-8 z-10 text-stone-100 select-none text-lg py-8"
+        className="fixed flex flex-col justify-between h-screen right-1 md:right-10 lg:right-16 z-10 text-stone-100 select-none text-lg py-8"
         animate={{ opacity: [0, 1], y: [100, 0] }}
         transition={{ type: "spring", delay: 2.5 }}
       >
