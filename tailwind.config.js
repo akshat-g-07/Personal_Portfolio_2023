@@ -13,12 +13,12 @@ export default {
       animation: {
         helloWordsAnimation:
           "helloWordsKeyframes 2.5s steps(5,end) alternate infinite,borderKeyframes 0.5s alternate infinite",
+        spinSlow: "spin 15s linear infinite",
+        spinRev: "spin 15s linear infinite reverse",
       },
       keyframes: {
         helloWordsKeyframes: {
-          "0%": { width: "0px" },
-          "80%": { width: "150px" },
-          "100%": { width: "150px" },
+          from: { width: "0px" },
         },
         borderKeyframes: {
           "0%": { borderColor: "white" },
