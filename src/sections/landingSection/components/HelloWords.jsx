@@ -12,7 +12,7 @@ const HelloWords = () => {
   const helloWords = ["नमस्ते", "Hello", "Hallo", "Hola", "Ciao", "Helló"];
 
   return (
-    <div className="text-white border-r-8 text-5xl font-helloWordsFont overflow-x-hidden animate-helloWordsAnimation origin-left">
+    <div className="w-24 md:w-44 text-white border-r-8 text-2xl md:text-5xl font-helloWordsFont overflow-x-hidden animate-helloWordsAnimation origin-left">
       {helloWords[wordIndex]}
     </div>
   );
