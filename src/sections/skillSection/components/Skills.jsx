@@ -20,6 +20,10 @@ const Skills = [
     icon: "threejs.png",
   },
   {
+    name: "Vite",
+    icon: "vite.png",
+  },
+  {
     name: "Redux",
     icon: "redux.png",
   },
@@ -54,7 +58,7 @@ const Skills = [
   },
   {
     name: "Material UI",
-    icon: "material.png",
+    icon: "materialui.png",
   },
   {
     name: "CSS",
