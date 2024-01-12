@@ -36,7 +36,7 @@ export default {
             transform: "translateX(-20%)",
           },
           "30%": {
-            transform: "translateX(-20%)",
+            transform: "translateX(-21%)",
           },
           "40%": {
             transform: "translateX(-40%)",
