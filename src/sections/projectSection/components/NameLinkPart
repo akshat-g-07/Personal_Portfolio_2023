@@ -1,0 +1,36 @@
+/* eslint-disable react/prop-types */
+import Button from "@mui/material/Button";
+import PublicIcon from "@mui/icons-material/Public";
+import GitHubIcon from "@mui/icons-material/GitHub";
+
+const NameLinkPart = ({ name, github, live }) => {
+  return (
+    <div className="w-full p-1 font-helloWordsFont">
+      <div className="w-full text-2xl py-2">{name}</div>
+      <div className="flex w-full py-1 justify-evenly">
+        {github.length > 1 && (
+          <Button
+            variant="contained"
+            startIcon={<GitHubIcon />}
+            color="secondary"
+            size={window.innerWidth < 768 ? "small" : "medium"}
+          >
+            GitHub
+          </Button>
+        )}
+        {live.length > 1 && (
+          <Button
+            variant="contained"
+            startIcon={<PublicIcon />}
+            color="secondary"
+            size={window.innerWidth < 768 ? "small" : "medium"}
+          >
+            Live
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default NameLinkPart;
