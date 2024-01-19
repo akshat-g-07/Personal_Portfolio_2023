@@ -9,7 +9,7 @@ const ProjectCard = ({ item }) => {
   return (
     <motion.div
       key={item.name}
-      className="bg-stone-700 h-auto w-72 overflow-x-hidden my-2 text-white text-sm md:h-32 md:w-32 lg:h-36 lg:w-36 lg:m-px lg:p-0 lg:grayscale hover:grayscale-0 lg:text-slate-500 hover:text-white"
+      className="bg-stone-700 h-auto w-72 md:w-80 overflow-x-hidden my-2 text-white text-sm md:text-lg lg:m-6"
     >
       <ImagesPart images={item.images} name={item.name} />
       <NameLinkPart name={item.name} github={item.github} live={item.live} />
