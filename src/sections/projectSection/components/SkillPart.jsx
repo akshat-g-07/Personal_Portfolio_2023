@@ -21,6 +21,7 @@ const SkillPart = ({ skills }) => {
           />
         );
       })}
+      <div className="h-0.5 w-full mt-1 bg-stone-800" />
     </div>
   );
 };
