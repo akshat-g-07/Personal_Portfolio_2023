@@ -20,7 +20,7 @@ const DescriptionPart = ({ description }) => {
         </UnorderedList>
       </Collapse>
       <div
-        className="font-bold text-stone-300 py-2"
+        className="font-bold text-stone-300 py-2 cursor-pointer w-20 md:w-28 overflow-x-hidden"
         onClick={() => {
           setShow(!show);
         }}
