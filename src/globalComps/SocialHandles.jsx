@@ -14,7 +14,7 @@ const SocialHandles = () => {
             onClick={() => {
               window.open(item.value, "_blank");
             }}
-            className="cursor-pointer"
+            className="cursor-pointer animate-pulse"
           >
             <Tooltip title={item.name} arrow>
               {item.icon}
