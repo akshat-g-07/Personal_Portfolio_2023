@@ -61,6 +61,12 @@ export default {
           },
         },
       },
+      borderImage: {
+        horizontalGradient:
+          "linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%) 1 100%",
+        verticalGradient:
+          "linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%) 1 100%",
+      },
     },
   },
   plugins: [],
