@@ -11,7 +11,7 @@ const EducationSection = () => {
       </div>
       <div className="text-white font-firstDescription font-bold text-xl md:text-3xl pt-4 flex items-center">
         <Avatar
-          alt="N I T"
+          alt="NIT"
           src="/images/nitp.png"
           sx={{ height: 56, width: 56 }}
         />
