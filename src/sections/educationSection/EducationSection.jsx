@@ -9,7 +9,7 @@ const EducationSection = () => {
           Education
         </div>
       </div>
-      <div className="text-white font-firstDescription font-bold text-xl md:text-3xl pt-4 flex items-center">
+      <div className="text-white font-firstDescription font-bold text-xl md:text-3xl pt-4 flex flex-row items-center">
         <Avatar
           alt="NIT"
           src="/images/nitp.png"
