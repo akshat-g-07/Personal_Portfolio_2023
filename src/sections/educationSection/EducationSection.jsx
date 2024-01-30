@@ -4,7 +4,7 @@ const EducationSection = () => {
     <div className="w-screen lg:w-max h-auto absolute top-72 lg:top-24 lg:right-48 lg:px-0 flex flex-col select-none pl-10 pr-3 md:px-14">
       <div className="text-left w-max font-sectionHeading text-xl md:text-4xl lg:text-5xl text-white">
         Institution that {window.innerWidth < 768 && <br />} shaped ME.
-        <div className="font-sectionDescription flex flex-row items-center text-sm md:text-2xl lg:text-3xl my-1 lg:my-5">
+        <div className="font-sectionDescription flex items-center text-sm md:text-2xl lg:text-3xl my-1 lg:my-5">
           <div className="w-[20px] h-0.5 mr-2 bg-white" />
           Education
         </div>
