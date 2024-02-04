@@ -3,7 +3,7 @@ import Skills from "./Skills";
 
 const SkillBody = () => {
   return (
-    <div className="flex flex-wrap justify-between md:flex-row-reverse md:pt-4 lg:flex-row lg:pt-0 lg:pl-96">
+    <div className="flex flex-row flex-wrap justify-between md:flex-row-reverse md:pt-4 lg:flex-row lg:pt-0 lg:pl-96">
       {Skills.map((item, index) => {
         return (
           <motion.div
