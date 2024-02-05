@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ThreeDModel from "./globalComps/ThreeDModel";
 import NextPrevButton from "./globalComps/NextPrevButton";
+import SocialHandles from "./globalComps/SocialHandles";
 import "./App.css";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         setScrollDown={setScrollDown}
         setTransitionTime={setTransitionTime}
       />
+      <SocialHandles />
     </>
   );
 }
