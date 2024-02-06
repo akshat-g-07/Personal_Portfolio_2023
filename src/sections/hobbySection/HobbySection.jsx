@@ -1,3 +1,4 @@
+import HobbyBody from "./components/HobbyBody";
 const HobbySection = () => {
   return (
     <div className="w-screen h-auto absolute top-44 flex flex-col select-none pl-16 pr-3 md:px-14 lg:px-28">
@@ -8,6 +9,7 @@ const HobbySection = () => {
           Hobbies
         </div>
       </div>
+      <HobbyBody />
     </div>
   );
 };
