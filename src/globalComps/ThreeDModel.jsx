@@ -4,9 +4,7 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
 import gsap from "gsap";
 
-// eslint-disable-next-line react/prop-types
 const ThreeDModel = ({ scrollTo, scrollDown, transitionTime }) => {
-  // console.log(scrollTo, scrollDown, transitionTime);
   const animationMixerRef = useRef(null);
   const animationActionRef = useRef(null);
   const renderer = useRef(null);
@@ -73,7 +71,11 @@ const ThreeDModel = ({ scrollTo, scrollDown, transitionTime }) => {
     1,
     1000
   );
-  camera.current.position.set(cameraCoords.x, cameraCoords.y, cameraCoords.z);
+  camera.current.position.set(
+    cameraCoords.current.x,
+    cameraCoords.current.y,
+    cameraCoords.current.z
+  );
 
   cameraTimeline.current = gsap.timeline();
 
@@ -123,7 +125,6 @@ const ThreeDModel = ({ scrollTo, scrollDown, transitionTime }) => {
   spotLight.shadow.focus = 1;
   scene.add(spotLight);
 
-  // eslint-disable-next-line no-unused-vars
   const charLoader = new GLTFLoader().load("models/character.glb", (gltf) => {
     const character = gltf.scene;
     character.castShadow = true;
@@ -131,7 +132,6 @@ const ThreeDModel = ({ scrollTo, scrollDown, transitionTime }) => {
     character.position.set(0, 0, 0);
     scene.add(character);
 
-    // eslint-disable-next-line no-unused-vars
     const animLoader = new FBXLoader().load("models/animation.fbx", (fbx) => {
       animationMixerRef.current = new THREE.AnimationMixer(character);
 
