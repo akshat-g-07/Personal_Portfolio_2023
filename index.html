@@ -40,6 +40,152 @@
   </head>
   <body>
     <div id="root"></div>
+    <div
+      id="canvas"
+      class="fixed top-0 -z-10"
+      style="background-color: black"
+    ></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script type="module">
+      import * as THREE from "three";
+      import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+      import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
+      import gsap from "gsap";
+
+      let scene,
+        renderer,
+        camera,
+        character,
+        animationMixer,
+        animationAction,
+        lowerTimeLimit = 0,
+        upperTimeLimit = 0,
+        scrollDown = 0;
+
+      init();
+
+      function init() {
+        const container = document.getElementById("canvas");
+
+        camera = new THREE.PerspectiveCamera(
+          45,
+          window.innerWidth / window.innerHeight,
+          1,
+          1000
+        );
+        camera.position.set(1, 2.5, 15);
+
+        scene = new THREE.Scene();
+
+        const spotLight = new THREE.SpotLight(0xffffff, 100);
+        spotLight.position.set(0, 5, 2);
+        spotLight.penumbra = 1;
+        spotLight.castShadow = true;
+        spotLight.shadow.focus = 1;
+        scene.add(spotLight);
+
+        const mesh = new THREE.Mesh(
+          new THREE.PlaneGeometry(100, 100),
+          new THREE.MeshPhongMaterial({ color: 0xcbcbcb, depthWrite: false })
+        );
+        mesh.rotation.x = -Math.PI / 2;
+        mesh.receiveShadow = true;
+        scene.add(mesh);
+
+        const charLoader = new GLTFLoader().load(
+          "models/character.glb",
+          (gltf) => {
+            const character = gltf.scene;
+            character.castShadow = true;
+            character.scale.set(1.5, 1.5, 1.5);
+            character.position.set(0, 0, 0);
+            scene.add(character);
+
+            character.traverse(function (object) {
+              if (object.isMesh) object.castShadow = true;
+            });
+
+            const animLoader = new FBXLoader().load(
+              "models/animation.fbx",
+              (fbx) => {
+                animationMixer = new THREE.AnimationMixer(character);
+
+                const animationClip = fbx.animations[0];
+                animationAction = animationMixer.clipAction(animationClip);
+
+                animationAction.play();
+                requestAnimationFrame(animate);
+                animationMixer.update(0.0001);
+                animationAction.paused = false;
+              }
+            );
+          }
+        );
+
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(2);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+        renderer.render(scene, camera);
+
+        window.addEventListener("resize", onWindowResize);
+      }
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        animationMixer.update(0.005 * scrollDown);
+        animationAction.paused = false;
+        if (
+          lowerTimeLimit <= animationAction.time &&
+          upperTimeLimit >= animationAction.time
+        ) {
+          animationAction.paused = true;
+          return;
+        }
+        renderer.render(scene, camera);
+      }
+
+      window.playAnimation = (direction, scrollToSection) => {
+        switch (scrollToSection) {
+          case "landing":
+            lowerTimeLimit = 0;
+            upperTimeLimit = 0.05;
+            break;
+          case "skills":
+            lowerTimeLimit = 1.5;
+            upperTimeLimit = 1.55;
+            break;
+          case "projects":
+            lowerTimeLimit = 2.5;
+            upperTimeLimit = 2.55;
+            break;
+          case "experience":
+            lowerTimeLimit = 4.25;
+            upperTimeLimit = 4.3;
+            break;
+          case "education":
+            lowerTimeLimit = 5.5;
+            upperTimeLimit = 5.55;
+            break;
+          case "hobby":
+            lowerTimeLimit = 6.5;
+            upperTimeLimit = 6.55;
+            break;
+          case "contact":
+            lowerTimeLimit = 8.45;
+            upperTimeLimit = 8.5;
+            break;
+        }
+        scrollDown = direction;
+        animate();
+      };
+    </script>
   </body>
 </html>
