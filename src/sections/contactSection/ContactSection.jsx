@@ -7,6 +7,8 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import SendIcon from "@mui/icons-material/Send";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { motion } from "framer-motion";
+import IncomingAnimation from "../../globalComps/IncomingAnimation";
 
 const ContactSection = () => {
   const [processing, setProcessing] = useState(false);
@@ -58,7 +60,13 @@ const ContactSection = () => {
   };
 
   return (
-    <div className="w-screen lg:w-3/5 h-auto absolute top-16 flex flex-col select-none pl-10 pr-3 lg:pr-40 md:px-14">
+    <motion.div
+      className="w-4/5 lg:w-3/5 h-auto absolute top-16 flex flex-col select-none pl-10 pr-3 lg:pr-40 md:px-14 pb-24"
+      animate={{
+        ...IncomingAnimation,
+        transition: { ...IncomingAnimation.transition, delay: 1 },
+      }}
+    >
       <div
         style={{
           background: "rgba( 255, 255, 255, 0.5 )",
@@ -128,7 +136,7 @@ const ContactSection = () => {
             </Button>
           )}
         </div>
-        <div className="flex flex-col items-center text-white text-xl my-5">
+        <div className="flex flex-col items-center text-white text-sm lg:text-xl my-5">
           <div>or send me a word</div>
           <div>
             <p>
@@ -151,7 +159,7 @@ const ContactSection = () => {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
