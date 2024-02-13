@@ -9,7 +9,7 @@ const ExperienceBody = () => {
         return (
           <div
             key={item}
-            className="h-auto w-full md:w-4/5 lg:w-7/12 bg-stone-600 p-2 ml-1"
+            className="h-auto w-4/5 lg:w-7/12 bg-stone-600 p-2 ml-1"
           >
             <div className="text-lg lg:text-2xl font-bold font-firstDescription">
               {item.role}
@@ -22,7 +22,7 @@ const ExperienceBody = () => {
               {item.duration}
               <div className="h-0.5 w-full md:w-7/12 bg-stone-400" />
             </div>
-            <div className="hidden lg:block">
+            <div className="hidden lg:block text-stone-400">
               <UnorderedList>
                 {item.description.map((desc) => {
                   return <ListItem key={desc}>{desc}</ListItem>;
