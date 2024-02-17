@@ -2,6 +2,12 @@
 import { useEffect } from "react";
 
 const ImagesPart = ({ images, name }) => {
+  const classValue =
+    name === "TrekLicious"
+      ? "projectImageCarouselChild flex animate-projectSlideAnimationtreklicious"
+      : name === "RatVenture"
+      ? "projectImageCarouselChild flex animate-projectSlideAnimationratventure"
+      : "projectImageCarouselChild flex animate-projectSlideAnimationgrillzilla";
   const divWidth = window.innerWidth < 768 ? "18rem" : "20rem";
   useEffect(() => {
     const copy = document
@@ -13,7 +19,7 @@ const ImagesPart = ({ images, name }) => {
   return (
     <div className="projectImageCarouselContainer h-40 flex">
       <div
-        className="projectImageCarouselChild flex animate-projectSlideAnimation"
+        className={classValue}
         style={{
           width: `calc(${divWidth} * ${images.length})`,
         }}
