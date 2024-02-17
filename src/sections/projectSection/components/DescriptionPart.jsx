@@ -7,7 +7,7 @@ const DescriptionPart = ({ description }) => {
   const [show, setShow] = useState(false);
 
   return (
-    <div className="mx-1 text-justify">
+    <div className="mx-1">
       <Collapse
         startingHeight={50}
         in={show}
