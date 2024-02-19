@@ -15,7 +15,12 @@ export default {
           "helloWordsKeyframes 2.5s steps(5,end) alternate infinite,borderKeyframes 0.5s alternate infinite",
         spinSlow: "spin 15s linear infinite",
         spinRev: "spin 15s linear infinite reverse",
-        projectSlideAnimation: "projectSlideKeyframes 15s infinite linear",
+        projectSlideAnimationtreklicious:
+          "projectSlideKeyframes 15s infinite linear",
+        projectSlideAnimationratventure:
+          "projectSlideKeyframes 15s infinite linear 1s",
+        projectSlideAnimationgrillzilla:
+          "projectSlideKeyframes 15s infinite linear 2s",
       },
       keyframes: {
         helloWordsKeyframes: {
