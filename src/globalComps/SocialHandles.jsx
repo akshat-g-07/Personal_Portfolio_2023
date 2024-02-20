@@ -4,7 +4,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 const SocialHandles = () => {
   return (
-    <div className="h-screen fixed left-1 md:left-5 flex flex-col justify-evenly">
+    <div className="h-screen fixed left-1 md:left-5 flex flex-col justify-evenly z-10">
       {SocialHandlesList.map((item, index) => {
         return (
           <motion.div
